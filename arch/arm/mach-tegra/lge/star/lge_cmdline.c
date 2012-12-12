@@ -125,7 +125,7 @@ void __init lge_manipulate_cmdline(char *default_command_line)
                 strlcat(s, param, COMMAND_LINE_SIZE);
         }
 	/* Evil hack: Convert the old uniqueid into the standard serialno */
-	{
+	if (strstr(s, "uniqueid=")) {
                 static char param[COMMAND_LINE_SIZE];
                 memset(param, 0, COMMAND_LINE_SIZE);
                 strcat(param, "androidboot.serialno=");
