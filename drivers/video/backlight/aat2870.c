@@ -623,7 +623,7 @@ static int aat2870_bl_get_brightness(struct backlight_device *bd)
 }
 
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 static int aat2870_bl_update_modestatus(struct backlight_device *bd)
 {
 //MOBII_CHNANGE_S 20120819 ih.han@mobii.co.kr : Modify ALS table value
@@ -726,7 +726,7 @@ static const struct backlight_ops aat2870_bl_ops = {
 	.get_brightness = aat2870_bl_get_brightness,
 	.update_status  = aat2870_bl_update_status,
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 	.update_modestatus  = aat2870_bl_update_modestatus,
 #endif
 // MOBII_E [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
@@ -1093,7 +1093,7 @@ static ssize_t aat2870_bl_store_onoff(struct device *dev, struct device_attribut
 }
 
 // MOBII_S [shhong@mobii.co.kr] 2012-05-10 : Rollbacked Sysfs Recovery
-#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 static ssize_t aat2870_bl_store_foff(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
 {
 	int onoff;
@@ -1153,7 +1153,7 @@ static DEVICE_ATTR(onoff,     0666, aat2870_bl_show_onoff, aat2870_bl_store_onof
 static DEVICE_ATTR(hwdim,     0666, aat2870_bl_show_hwdim, aat2870_bl_store_hwdim);
 static DEVICE_ATTR(lsensor_onoff, 0666, aat2870_bl_show_lsensor_onoff, aat2870_bl_store_lsensor_onoff);
 // MOBII_S [shhong@mobii.co.kr] 2012-05-10 : Rollbacked Sysfs Recovery
-#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 static DEVICE_ATTR(panel_info,0666, aat2870_bl_show_panel_info, aat2870_bl_store_panel_info);
 static DEVICE_ATTR(foff,      0666, aat2870_bl_show_onoff, aat2870_bl_store_foff);
 #endif
@@ -1168,7 +1168,7 @@ static struct attribute *aat2870_bl_attributes[] = {
         &dev_attr_hwdim.attr,
         &dev_attr_lsensor_onoff.attr,
 // MOBII_S [shhong@mobii.co.kr] 2012-05-10 : Rollbacked Sysfs Recovery
-#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 	&dev_attr_panel_info.attr,
 	&dev_attr_foff.attr,
 #endif

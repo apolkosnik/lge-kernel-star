@@ -57,7 +57,7 @@ struct backlight_ops {
 	int (*check_fb)(struct backlight_device *, struct fb_info *);
 	
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined (CONFIG_MACH_STAR_P990) || (CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 	int (*update_modestatus)(struct backlight_device *);
 #endif
 // MOBII_E [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
@@ -82,7 +82,7 @@ struct backlight_properties {
 	unsigned int state;
 	
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined (CONFIG_MACH_STAR_P990) || (CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 	int brightness_mode;
 #endif
 // MOBII_E [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
@@ -116,7 +116,7 @@ struct backlight_device {
 };
 
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined (CONFIG_MACH_STAR_P990) || (CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 static inline void backlight_update_modestatus(struct backlight_device *bd)
 {
 	mutex_lock(&bd->update_lock);

@@ -136,7 +136,7 @@ static ssize_t backlight_store_power(struct device *dev,
 }
 
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined (CONFIG_MACH_STAR_P990) || (CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 static ssize_t backlight_show_brightnessmode(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -290,7 +290,7 @@ static struct device_attribute bl_device_attributes[] = {
 	__ATTR(brightness, 0666 /*0644*/ , backlight_show_brightness,
 		     backlight_store_brightness),
 // MOBII_S [shhong@mobii.co.kr] 2012-05-07 : Auto Brightness Setting From P990.
-#if defined (CONFIG_MACH_STAR_P990) || (CONFIG_MACH_STAR_SU660)
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
 	__ATTR(brightness_mode, 0666 /*0644*/ , backlight_show_brightnessmode,
 		     backlight_store_brightnessmode),
 #endif

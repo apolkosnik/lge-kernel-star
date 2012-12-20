@@ -307,7 +307,7 @@
 #define PRODUCT_NAME_ANDROID	"P990 Storage"
 #define PRODUCT_NAME_EXTERNAL 	"P990 SD Card"
 #elif defined(CONFIG_MACH_STAR_P999)
-#define PRODUCT_NAME_ANDROID   "P999"
+#define PRODUCT_NAME_ANDROID   "P999 Storage"
 #define PRODUCT_NAME_EXTERNAL  "P999 SD Card"
 #else
 #define PRODUCT_NAME_ANDROID	"LG Star Storage"
