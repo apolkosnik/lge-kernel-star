@@ -41,6 +41,48 @@
 #include <linux/fs.h>
 #include <linux/syscalls.h>
 #include <lge/board-star-nv.h>
+#include <linux/genhd.h>
+
+static char nvdata_partition[] = LGE_NVDATA_PARTITION;
+
+static void __init lge_nvdata_partition_init(void)
+{
+	dev_t dsk = blk_lookup_devt("mmcblk0", 0);
+	if (!dsk) {
+		pr_err("%s: %d FAIL to detect mmcblk0\n", __func__, dsk);
+	} else {
+		int partno;
+		struct gendisk *disk = get_gendisk(dsk, &partno);
+		int partitions[] = {
+			5, /* for ICS partition layout */
+			3, /* for GB partition layout */
+			0,
+		};
+
+		if (disk) {
+			int i;
+			struct hd_struct *part;
+			struct disk_part_tbl *ptbl;
+
+			ptbl = disk->part_tbl;
+			for (i = 0; partitions[i]; i++) {
+				part = ptbl->part[partitions[i]];
+				pr_info("%s: mmcblk0p%d %lu\n", __func__, partitions[i], (long)part->nr_sects);
+
+				if (part->nr_sects == 4096) {
+					/* the sector size of the misc partition is 4096 */
+					sprintf(nvdata_partition, "/dev/block/mmcblk0p%d", partitions[i]);
+					pr_info("%s: misc partition found %s\n", __func__, nvdata_partition);
+					break;
+				}
+			}
+			put_disk(disk);
+		} else {
+			pr_err("%s: %d FAIL to get_gendisk mmcblk0\n", __func__);
+		}
+	}
+}
+late_initcall(lge_nvdata_partition_init);
 
 int lge_nvdata_raw_read(int offset, char* buf, int size)
 {
@@ -50,7 +92,7 @@ int lge_nvdata_raw_read(int offset, char* buf, int size)
 	int ret = 0;
 	mm_segment_t oldfs = get_fs();
 	set_fs(KERNEL_DS);
-	h_file = sys_open(LGE_NVDATA_PARTITION, O_RDWR,0);
+	h_file = sys_open(nvdata_partition, O_RDWR,0);
 
 	if(h_file >= 0)
 	{
@@ -93,7 +135,7 @@ int lge_nvdata_raw_write(int offset, char* buf, int size)
 
 	mm_segment_t oldfs = get_fs();
 	set_fs(KERNEL_DS);
-	h_file = sys_open(LGE_NVDATA_PARTITION, O_RDWR,0);
+	h_file = sys_open(nvdata_partition, O_RDWR,0);
 
 	if(h_file >= 0)
 	{
