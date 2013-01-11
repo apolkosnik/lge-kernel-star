@@ -111,7 +111,7 @@ typedef const struct si_pub  si_t;
 #include <linux/rtnetlink.h>
 
 #define WL_IW_USE_ISCAN  1
-#define ENABLE_ACTIVE_PASSIVE_SCAN_SUPPRESS  1
+#define ENABLE_ACTIVE_PASSIVE_SCAN_SUPPRESS  0
 
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 25)) && 1
@@ -1738,6 +1738,7 @@ wl_control_wl_start(struct net_device *dev)
 #if defined(CONFIG_LGE_BCM432X_PATCH) && defined(CONFIG_BRCM_USE_DEEPSLEEP)
 		/* Use Deep Sleep instead of WL RESET */
 		dhd_deep_sleep(dev, FALSE);
+		wl_iw_send_priv_event(dev, "START");
 #else /* CONFIG_LGE_BCM432X_PATCH && CONFIG_BRCM_USE_DEEPSLEEP */
 #if defined(CONFIG_BRCM_USE_GPIO_RESET) /* Do not use GPIO Reset at On/Off. Use mpc. */
 		dhd_customer_gpio_wlan_ctrl(WLAN_RESET_ON);
@@ -1813,7 +1814,7 @@ wl_iw_control_wl_off(
 /* LGE_CHANGE_S, [yoohoo@lge.com], 2009-11-19, Use deepsleep instead of dhd_dev_reset when driver start or stop */
 #if defined(CONFIG_BRCM_USE_DEEPSLEEP)
 		/* Use Deep Sleep instead of WL Reset*/
-		dhd_deep_sleep(wl_ctl->dev, TRUE);
+		dhd_deep_sleep(dev, TRUE);
 #elif defined(CONFIG_BRCM_USE_GPIO_RESET)
 		dhd_dev_reset(dev, 1);
 #endif /* CONFIG_BRCM_USE_DEEPSLEEP, CONFIG_BRCM_USE_GPIO_RESET */
@@ -2007,7 +2008,7 @@ wl_iw_control_wl_off_softap(
 
 #if defined(WL_IW_USE_ISCAN)
 		
-#if  !defined(CSCAN)
+#ifndef CSCAN
 		wl_iw_free_ss_cache();
 		wl_iw_run_ss_cache_timer(0);
 		memset(g_scan, 0, G_SCAN_RESULTS);
@@ -8162,7 +8163,7 @@ static int wl_iw_set_priv(
 	    else if (strnicmp(extra, "POWERMODE", strlen("POWERMODE")) == 0)
 			ret = wl_iw_set_btcoex_dhcp(dev, info, (union iwreq_data *)dwrq, extra);
 #else
-		else if (strnicmp(extra, "POWERMODE", 9) == 0)
+		else if (strnicmp(extra, "BTCOEXMODE", 9) == 0)
 			ret = wl_iw_set_powermode(dev, info,
 					(union iwreq_data *)dwrq, extra);
 		else if (strnicmp(extra, "SCAN-CHANNELS", 13) == 0)
@@ -8246,7 +8247,7 @@ static int wl_iw_set_priv(
 			WL_TRACE(("Unknown PRIVATE command %s\n", extra));
 			snprintf(extra, MAX_WX_STRING, "OK");
 			dwrq->length = strlen("OK") + 1;
-			WL_ERROR(("Unknown PRIVATE command, ignored\n"));
+			WL_TRACE(("Unknown PRIVATE command, ignored\n"));
 		}
 		WAKE_UNLOCK(iw->pub, WAKE_LOCK_PRIV);
 		WAKE_LOCK_DESTROY(iw->pub, WAKE_LOCK_PRIV);
