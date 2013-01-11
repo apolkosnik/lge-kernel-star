@@ -37,9 +37,10 @@ static struct spi_board_info __initdata spi_bus1_devices_info[] = {
 		.mode = SPI_MODE_1,
 		.max_speed_hz = 24000000,
 #ifdef CONFIG_MACH_STAR_P999
-		.controller_data = &tegra_spi_slave_device1,  
+		.controller_data = &tegra_spi_slave_device1,
+#else
+		.controller_data = &tegra_spi_device1,
 #endif
-		//.controller_data = &tegra_spi_device1,  
 		.irq = 0, // 277 ? GPIO_IRQ(TEGRA_GPIO_PO5),
 		.platform_data = 0,
 	},
@@ -132,6 +133,7 @@ static struct platform_device *n731_device[] = {
 static struct platform_device *spi_loopback_device[] = {
 	/* spi slave / master */
 	&tegra_spi_slave_device1,
+	//&tegra_spi_slave_device2,
 	&tegra_spi_device2,
 };
 

@@ -402,6 +402,9 @@ extern void star_setup_bluesleep(void);
 
 static void __init tegra_star_init(void)
 {
+	extern unsigned int system_serial_low;
+	extern unsigned int system_serial_high;
+
 	star_setup_reboot();
 	tegra_clk_init_from_table(star_clk_init_table);
 	star_pinmux_init();
@@ -437,6 +440,25 @@ static void __init tegra_star_init(void)
 #if defined(CONFIG_MACH_STAR)
 	star_muic_init();
 #endif
+
+#define FUSE_UID_LOW           0x108
+#define FUSE_UID_HIGH          0x10c
+       extern u32 tegra_fuse_readl(unsigned long);
+       char *p;
+
+       /* set serialno */
+       system_serial_high = tegra_fuse_readl(FUSE_UID_HIGH);
+       system_serial_low = tegra_fuse_readl(FUSE_UID_LOW);
+
+        /* HACK fixup androidboot.serialno and update /proc/cmdline */
+       if ((p = strstr(saved_command_line, "=0123456789ABCDEF"))) {
+               char serial[17];
+
+               p++;
+               snprintf(serial, sizeof(serial), "%08x%08x", system_serial_high, system_serial_low);
+               strncpy(p, serial, 16);
+               printk(KERN_INFO "fixed cmdline=%s\n", saved_command_line);
+       }
 
 #if defined (CONFIG_STAR_REBOOT_MONITOR) || defined (CONFIG_BSSQ_REBOOT_MONITOR)
 #define RAM_RESERVED_SIZE 100*1024

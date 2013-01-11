@@ -44,3 +44,5 @@ obj-$(CONFIG_TEGRA_BPC_MGMT)	+= tegra_bpc_mgmt.o
 # SU660 BATTERY CHARGER #
 obj-$(CONFIG_BATTERY_CHARGER)	+= max8922l.o
 obj-$(CONFIG_BATTERY_CHARGER)	+= su660_battery.o
+#obj-$(CONFIG_BATTERY_CHARGER)	+= star_gauge.o
+

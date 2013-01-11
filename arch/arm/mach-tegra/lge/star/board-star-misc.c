@@ -60,6 +60,12 @@ static int __init tegra_hw_rev_setup(char *line)
 		start_hw_rev = REV_J;
 	else if (!strncmp(board_rev, "1.0", sizeof("1.0")))
 		start_hw_rev = REV_1_0;
+	else if (!strncmp(board_rev, "1.1", sizeof("1.1")))
+		start_hw_rev = REV_1_1;
+	else if (!strncmp(board_rev, "1.2", sizeof("1.2")))
+		start_hw_rev = REV_1_2;
+	else if (!strncmp(board_rev, "1.3", sizeof("1.3")))
+		start_hw_rev = REV_1_3;
 	else
 	{
 		printk(KERN_ERR "FAILED!!! board_rev: %s\n",board_rev);

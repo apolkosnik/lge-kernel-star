@@ -161,7 +161,7 @@ const struct tegra_init_gpio_info tegra_init_gpio_info_array[] = {
 const struct tegra_init_gpio_info tegra_sleep_gpio_info_array[] = {
     /* tristate off */
     { 0xFF,         0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   PMC},     // PMC
-    //{ 0xFF,         0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   I2CP},    // power i2c 
+    { 0xFF,         0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   I2CP},    // power i2c 
 
     /* Keep gpio output level */
     { 'w'-'a',      1, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_INIT_ONLY_LOW,   LM1},  // WLAN_EN
@@ -171,7 +171,9 @@ const struct tegra_init_gpio_info tegra_sleep_gpio_info_array[] = {
     { 'v'-'a',      1, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_INIT_ONLY_LOW,     UAC},   // IFX_PWRON_1.8V high½Ã 300uA¹ß»ý.
     
     /* All GPIO output pins should be defined here */
-    //{ 'h'-'a',      2, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW/*GPIO_SLEEP_HIGH*/,  ATD},   // TEST_GPIO2(Sleep status)(P999BN)
+#if defined(CONFIG_MACH_STAR_P999)
+    { 'h'-'a',      2, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW/*GPIO_SLEEP_HIGH*/,  ATD},   // TEST_GPIO2(Sleep status)(P999BN)
+#endif
     { 't'-'a',      4, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   DTA},   // 8MN_CAM_VCM_EN
     { 'd'-'a',      5, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   DTA},   // VT_CAM_PWDN 
     { 't'-'a',      2, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   DTB},   // FLASH_LED_TOURCH
@@ -182,17 +184,16 @@ const struct tegra_init_gpio_info tegra_sleep_gpio_info_array[] = {
     { 'u'-'a',      1, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   GPU},   // AP20_UART_SW
     { 'u'-'a',      2, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,  GPU},   // MDM_UART_SW
     { 'u'-'a',      4, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   GPU},   // VIBE_EN
-
-#if defined(CONFIG_MACH_STAR_P999)    
+#if defined(CONFIG_MACH_STAR_P999)
     { 'j'-'a',      6, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   IRRX},  // IPC_MRDY1 (P999bn)
-#endif    
-
-#if defined(CONFIG_MACH_STAR_P990)
+#endif
+#if defined(CONFIG_MACH_STAR_P990) || defined(CONFIG_MACH_STAR_P999)
     { 'r'-'a',      7, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_HIGH,   KBCB}, // IFX_VBUS_EN
-#elif defined(CONFIG_MACH_STAR_SU660) || defined(CONFIG_MACH_STAR_P999)
+#elif defined(CONFIG_MACH_STAR_SU660) 
     { 'r'-'a',      7, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   KBCB},  // DMB_EN
 #else
-	#error
+//	#error
+    { 'r'-'a',      7, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   KBCB}, // IFX_VBUS_EN
 #endif
     { 'r'-'a',      3, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   KBCD},  // BL_DCDC_RST_N
     { 'r'-'a',      6, GPIO_ENABLE, GPIO_OUTPUT,    GPIO_SLEEP_LOW,   KBCD},  // CAM_SUBPM_EN
@@ -224,11 +225,15 @@ const struct tegra_init_gpio_info tegra_sleep_gpio_info_array[] = {
     //{ 'i'-'a',      5, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATB},   // MICROSD_DET_N
 
     /* input pins */
-    //{ 'h'-'a',      1, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATD},   // TEST_GPIO1(P999BN)
+#if defined(CONFIG_MACH_STAR_P999)
+    { 'h'-'a',      1, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATD},   // TEST_GPIO1(P999BN)
+#endif
     //{ 'h'-'a',      0, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATD},   // NC
     //{ 'h'-'a',      3, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATD},   // NC
     { 'u'-'a',      5, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   GPU},   // HALL_INT
-    //{ 'u'-'a',      3, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   GPU},   // VIBE_PWM(P999BN)
+#if defined(CONFIG_MACH_STAR_P999)
+    { 'u'-'a',      3, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   GPU},   // VIBE_PWM(P999BN)
+#endif
     { 'u'-'a',      0, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   GPU},   // INT_N_MUIC
     { 'u'-'a',      6, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   GPU},   // VIBE_PMW(LGP990), IPC_SRDY1(P999BN)
     { 'r'-'a',      4, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   KBCD},  // COM_INT
@@ -236,11 +241,9 @@ const struct tegra_init_gpio_info tegra_sleep_gpio_info_array[] = {
 	{ 'r'-'a',		5,	GPIO_ENABLE,	GPIO_OUTPUT,	GPIO_SLEEP_LOW,		KBCD},  // NC
 #elif defined(CONFIG_MACH_STAR_SU660)
 	{ 'r'-'a',		5,	GPIO_ENABLE,	GPIO_OUTPUT,	GPIO_SLEEP_HIGH,	KBCD},  // IFX_VBUS_EN
-#elif defined(CONFIG_MACH_STAR_P999)
-	{ 'r'-'a',		5,	GPIO_ENABLE,	GPIO_INPUT,	GPIO_SLEEP_LOW,		KBCD},
 #else
-	#error
-	//{ 'r'-'a',	5,	GPIO_ENABLE,	GPIO_INPUT,		GPIO_SLEEP_LOW,		KBCD},  // BATT_ID(P999BN)??
+//	#error
+	{ 'r'-'a',	5,	GPIO_ENABLE,	GPIO_INPUT,		GPIO_SLEEP_LOW,		KBCD},  // BATT_ID(P999BN)??
 #endif
 	{ 'q'-'a',		5,	GPIO_ENABLE,	GPIO_INPUT,		GPIO_SLEEP_LOW,	KBCF},  // GYRO_INT_N
     { 'q'-'a',      2, GPIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   KBCF},  // CHG_PGB_N
@@ -280,12 +283,12 @@ const struct tegra_init_gpio_info tegra_sleep_gpio_info_array[] = {
 	{ 'a'-'a',		5,	GPIO_ENABLE, GPIO_INPUT,	GPIO_SLEEP_LOW,	 		DAP2}, 	// DAP2
  
    /* voice call ?? */
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   CDEV1},   // AUDIO MCLK
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   CDEV2},   // AUDIO MCLK2
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATC},     // GMI_ADV_N, GMI_OE **    
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP1},    // DAP1
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP2},    // DAP2
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP4},    // BT DAP
-    //{ 0xFF        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP3},    // DAP 
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   CDEV1},   // AUDIO MCLK
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   CDEV2},   // AUDIO MCLK2
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   ATC},     // GMI_ADV_N, GMI_OE **    
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP1},    // DAP1
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP2},    // DAP2
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP4},    // BT DAP
+    { 0xFF,        0, SFIO_ENABLE, GPIO_INPUT,     GPIO_SLEEP_LOW,   DAP3},    // DAP 
 };
 

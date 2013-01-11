@@ -2276,7 +2276,8 @@ static int __init battery_probe(struct platform_device *pdev)
 	/* Initialize Variables */
 	previous_gauge = 100;
 	batt_info->present = 1;
-	batt_info->gauge_on = 0;
+	//batt_info->gauge_on = 0;
+	batt_info->gauge_on = 1;
 	batt_info->capacity = 104;
 	batt_info->capacity_gauge = 111;
 	batt_info->health = POWER_SUPPLY_HEALTH_GOOD;

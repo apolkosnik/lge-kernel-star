@@ -116,7 +116,7 @@ void star_setup_reboot(void)
         pr_err("%s: failed to regsiter platform reboot notifier\n",
                 __func__);
 
-    atomic_notifier_chain_register(&panic_notifier_list, & star_panic_nb);
+    atomic_notifier_chain_register(&panic_notifier_list, &star_panic_nb);
 
 }
 

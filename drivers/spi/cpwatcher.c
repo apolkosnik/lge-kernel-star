@@ -50,7 +50,7 @@
 
 #define CPW_IFX_TEGRA_EDGE_TRIGGER
 
-//#define CPW_DEBUG_MODE
+#define CPW_DEBUG_MODE
 #ifdef CPW_DEBUG_MODE
 #define CPW_DEBUG(format, args...) printk("[CPW] : %s (%d line): " format "\n", __FUNCTION__, __LINE__, ## args)
 #else
